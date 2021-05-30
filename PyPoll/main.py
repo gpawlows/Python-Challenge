@@ -5,6 +5,7 @@ import csv
 voterID = []
 county = []
 candidate = []
+max_votes = 0
 
 
 # Set path for file
@@ -30,15 +31,16 @@ with open(csvpath) as csvfile:
     
     #join list into one list of data
     votingdata = zip(voterID, county, candidate)
-        
-    print(len(voterID))
+    print("Election Results") 
+    print("-------------------------")   
+    print("Total Votes: " + str(len(voterID)))
+    print("-------------------------")
     #find unique candidates without using pandas
     unique_candidates = []
     for i in candidate:
         if i not in unique_candidates:
             unique_candidates.append(i)
-    print(unique_candidates)
-    
+        
     #Print candidate vote information
     for j in unique_candidates:
         votes=0
@@ -50,8 +52,13 @@ with open(csvpath) as csvfile:
         percent_of_vote = votes/len(voterID)
         format_percentage_of_vote = "{:.4%}".format(percent_of_vote)
         print(f"{j}: {format_percentage_of_vote} ({votes})")
-    
-    #reset lists
+        #Calculate max votes
+        if votes > max_votes:
+            max_votes = votes
+            winner = j
+    print("-------------------------")
+    print(f"Winner: {winner}")
+   #reset lists
     voterID = []
     county = []
     candidate = []
