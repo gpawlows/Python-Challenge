@@ -41,9 +41,15 @@ with open(csvpath) as csvfile:
     
     #Print candidate vote information
     for j in unique_candidates:
+        votes=0
+        #for loop to count votes for each candidate
         for k in candidate:
-            votes = len(candidate[j]
-            print(votes)
+            if k == j:
+                votes +=1
+        #Calculate percent of vote won
+        percent_of_vote = votes/len(voterID)
+        format_percentage_of_vote = "{:.4%}".format(percent_of_vote)
+        print(f"{j}: {format_percentage_of_vote} ({votes})")
     
     #reset lists
     voterID = []
