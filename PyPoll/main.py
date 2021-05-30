@@ -50,7 +50,7 @@ with open(csvpath) as csvfile:
                 votes +=1
         #Calculate percent of vote won
         percent_of_vote = votes/len(voterID)
-        format_percentage_of_vote = "{:.4%}".format(percent_of_vote)
+        format_percentage_of_vote = "{:.3%}".format(percent_of_vote)
         print(f"{j}: {format_percentage_of_vote} ({votes})")
         #Calculate max votes
         if votes > max_votes:
