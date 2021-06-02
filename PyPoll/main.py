@@ -7,7 +7,6 @@ county = []
 candidate = []
 max_votes = 0
 
-
 # Set path for file
 
 csvpath = os.path.join('Resources/election_data.csv')
@@ -56,8 +55,46 @@ with open(csvpath) as csvfile:
         if votes > max_votes:
             max_votes = votes
             winner = j
+     #Print the winner   
     print("-------------------------")
     print(f"Winner: {winner}")
+   
+   # Set variable for output file
+    output_file = os.path.join("election_analysis.csv")
+
+   #reset max votes
+    
+    max_votes = 0  
+      
+   #  Open the output file
+    with open(output_file, "w", newline="") as datafile:
+        writer = csv.writer(datafile)
+    
+        writer.writerow(["Election Results"])
+        writer.writerow(["------------------------"])
+        writer.writerow(["Total Votes: " + str(len(voterID))])
+        writer.writerow(["------------------------"])
+
+    #Print candidate vote information
+        for j in unique_candidates:
+            votes=0
+        #for loop to count votes for each candidate
+            for k in candidate:
+                if k == j:
+                    votes +=1
+        #Calculate percent of vote won
+            percent_of_vote = votes/len(voterID)
+            format_percentage_of_vote = "{:.3%}".format(percent_of_vote)
+            writer.writerow([f"{j}: {format_percentage_of_vote} ({votes})"])
+        #Calculate max votes
+            if votes > max_votes:
+                max_votes = votes
+                winner = j
+    #Print the winner
+        writer.writerow(["-------------------------"])
+        writer.writerow([f"Winner: {winner}"])
+   
+
    #reset lists
     voterID = []
     county = []
