@@ -22,6 +22,7 @@ total_profit_loss = 0
 max_profit = 0
 max_loss = 0
 average_change = 0
+total_change = 0
 
 # Set path for file
 
@@ -54,16 +55,24 @@ with open(csvpath) as csvfile:
         #add the profit or loss to the total
         total_profit_loss += int(Profit_Loss[Entries-1])
 
+        # Establish For Loop length
+        Looplength = Entries - 1
+
         #Logic check to see if this value is greater than the current max_profit value held
-        if int(Profit_Loss[Entries-1]) > int(max_profit):
-            max_profit = Profit_Loss[Entries-1]
-            profit_date = Date[Entries-1]
+        for i in range(1, Looplength):
+            if (int(Profit_Loss[i])-int(Profit_Loss[i-1])) > int(max_profit):
+                max_profit = int(Profit_Loss[i])-int(Profit_Loss[i-1])
+                profit_date = Date[i]
         #Logic check to see if this value is greater than the max_loss value held
-        if int(Profit_Loss[Entries-1]) < int(max_loss):
-            max_loss = Profit_Loss[Entries-1]
-            loss_date = Date[Entries-1]
+        for j in range(1, Looplength):
+            if (int(Profit_Loss[i])-int(Profit_Loss[i-1])) < int(max_loss):
+                max_loss = int(Profit_Loss[i])-int(Profit_Loss[i-1])
+                loss_date = Date[i]
         
-        #Convuluted if loop to work out months in the budget data because I'm trying not to use the built in modules or pandas in this
+    #Calculate total change
+    for k in range(1, Entries):
+        total_change = int(Profit_Loss[k]) - int(Profit_Loss[k-1]) + total_change
+    #Convuluted if loop to work out months in the budget data because I'm trying not to use the built in modules or pandas in this
         #hw
     if month[0] == "Jan":
         beginning_month_value = 1
@@ -118,7 +127,7 @@ with open(csvpath) as csvfile:
         ending_month_value = 12
 
     #calculate average change
-    average_change = float(total_profit_loss/Entries)
+    average_change = float(total_change/(Entries-1))
     formatted_average_change = "{:.2f}".format(average_change)
     #calculate total months
     total_months = year[Entries-1]*12 - year[0] * 12 + ending_month_value - beginning_month_value + 1
@@ -131,7 +140,7 @@ with open(csvpath) as csvfile:
     print(f"Average Change: $ {formatted_average_change}")
     print(f"Greatest Increase in Profits: {profit_date} ${max_profit}")
     print(f"Greatest Decrease in Profits: {loss_date} ${max_loss}")
-    
+    print(total_change)
     #reset lists
     Date = []
     Profit_Loss = []
