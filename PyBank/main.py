@@ -58,12 +58,12 @@ with open(csvpath) as csvfile:
         # Establish For Loop length
         Looplength = Entries - 1
 
-        #Logic check to see if this value is greater than the current max_profit value held
+        #Logic check to see if this value is greater than the current max change value held
         for i in range(1, Looplength):
             if (int(Profit_Loss[i])-int(Profit_Loss[i-1])) > int(max_profit):
                 max_profit = int(Profit_Loss[i])-int(Profit_Loss[i-1])
                 profit_date = Date[i]
-        #Logic check to see if this value is greater than the max_loss value held
+        #Logic check to see if this value is greater than the max change value held
         for j in range(1, Looplength):
             if (int(Profit_Loss[i])-int(Profit_Loss[i-1])) < int(max_loss):
                 max_loss = int(Profit_Loss[i])-int(Profit_Loss[i-1])
@@ -72,6 +72,7 @@ with open(csvpath) as csvfile:
     #Calculate total change
     for k in range(1, Entries):
         total_change = int(Profit_Loss[k]) - int(Profit_Loss[k-1]) + total_change
+    
     #Convuluted if loop to work out months in the budget data because I'm trying not to use the built in modules or pandas in this
         #hw
     if month[0] == "Jan":
@@ -140,7 +141,23 @@ with open(csvpath) as csvfile:
     print(f"Average Change: $ {formatted_average_change}")
     print(f"Greatest Increase in Profits: {profit_date} ${max_profit}")
     print(f"Greatest Decrease in Profits: {loss_date} ${max_loss}")
-    print(total_change)
+    
+    # Specify the file to write to
+    output_path = os.path.join("bank_analysis.csv")
+
+    # Open the file using "write" mode. Specify the variable to hold the contents
+    with open(output_path, 'w', newline='') as csvfile:
+        
+        writer = csv.writer(csvfile)
+        
+        writer.writerow(["Financial Analysis"])
+        writer.writerow(["-----------------------------"])
+        writer.writerow([f"Total Months:  {total_months}"])
+        writer.writerow([f'Total: ${total_profit_loss}'])
+        writer.writerow([f"Average Change: $ {formatted_average_change}"])
+        writer.writerow([f"Greatest Increase in Profits: {profit_date} ${max_profit}"])
+        writer.writerow([f"Greatest Decrease in Profits: {loss_date} ${max_loss}"])
+
     #reset lists
     Date = []
     Profit_Loss = []
